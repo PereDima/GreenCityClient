@@ -56,6 +56,8 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     }
   };
   public onSubmit;
+  private quillBlurred = false;
+  private quillFocused = false;
 
   constructor(
     public router: Router,
@@ -313,15 +315,15 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   focus($event) {
     // tslint:disable-next-line:no-console
     console.log('focus', $event);
-    // this.focused = true;
-    // this.blurred = false;
+    this.quillFocused = true;
+    this.quillBlurred = false;
   }
 
   blur($event) {
     // tslint:disable-next-line:no-console
     console.log('blur', $event);
-    // this.focused = false;
-    // this.blurred = true;
+    this.quillFocused = false;
+    this.quillBlurred = true;
   }
 
   ngOnDestroy() {
