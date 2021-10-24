@@ -66,6 +66,14 @@
             formControlName="content"
             (keyup)="autoResize(true, $event)"
           ></textarea>
+          <quill-editor
+            [styles]="{ height: '200px' }"
+            (onFocus)="focus($event)"
+            (onEditorChanged)="changedEditor($event)"
+            (onBlur)="blur($event)"
+            (onEditorCreated)="created($event)"
+          >
+          </quill-editor>
           <p class="textarea-description">{{ 'create-news.content-tooltip' | translate }}</p>
         </div>
         <div class="date">

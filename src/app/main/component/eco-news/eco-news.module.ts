@@ -25,6 +25,8 @@ import { MatSnackBarComponent } from '../errors/mat-snack-bar/mat-snack-bar.comp
 import { EcoNewsComponent } from './eco-news.component';
 import { ACTION_CONFIG, ACTION_TOKEN } from './components/create-edit-news/action.constants';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { QuillModule } from 'ngx-quill';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
         deps: [HttpClient]
       },
       isolate: true
-    })
+    }),
+    QuillModule.forRoot(),
+    MatFormFieldModule
   ],
   exports: [TranslateModule],
   entryComponents: [],
