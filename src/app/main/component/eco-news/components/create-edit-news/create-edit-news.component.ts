@@ -15,6 +15,7 @@ import { ActionInterface } from '../../models/action.interface';
 import { MatSnackBarComponent } from '@global-errors/mat-snack-bar/mat-snack-bar.component';
 import { FormBaseComponent } from '@shared/components/form-base/form-base.component';
 import { LocalStorageService } from '@global-service/localstorage/local-storage.service';
+import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 
 @Component({
   selector: 'app-create-edit-news',
@@ -234,7 +235,7 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
 
   private filterArr = (item: FilterModel, index: number) => {
     return [...this.filters.slice(0, index), item, ...this.filters.slice(index + 1)];
-  }
+  };
 
   public setActiveFilters(itemToUpdate: EcoNewsModel): void {
     if (itemToUpdate.tags.length) {
@@ -296,6 +297,31 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
 
   public isImageValid(): boolean {
     return this.createEcoNewsService.isImageValid;
+  }
+
+  created(event) {
+    // tslint:disable-next-line:no-console
+    // event: Quill
+    console.log('editor-created', event);
+  }
+
+  changedEditor(event: EditorChangeContent | EditorChangeSelection) {
+    // tslint:disable-next-line:no-console
+    console.log('editor-change', event);
+  }
+
+  focus($event) {
+    // tslint:disable-next-line:no-console
+    console.log('focus', $event);
+    // this.focused = true;
+    // this.blurred = false;
+  }
+
+  blur($event) {
+    // tslint:disable-next-line:no-console
+    console.log('blur', $event);
+    // this.focused = false;
+    // this.blurred = true;
   }
 
   ngOnDestroy() {
