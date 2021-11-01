@@ -81,7 +81,7 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
 
   ngOnInit() {
     this.getNewsIdFromQueryParams();
-    this.initPageforCreateOrEdit();
+    this.initPageForCreateOrEdit();
     this.onSourceChange();
     this.setLocalizedTags();
   }
@@ -132,7 +132,7 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
       });
   }
 
-  public initPageforCreateOrEdit(): void {
+  public initPageForCreateOrEdit(): void {
     this.textAreasHeight = TEXT_AREAS_HEIGHT;
     if (this.createEcoNewsService.isBackToEditing) {
       if (this.createEcoNewsService.getNewsId()) {
@@ -291,9 +291,9 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
 
   public toggleIsActive(filterObj: FilterModel, newValue: boolean): void {
     const index = this.filters.findIndex((item: FilterModel) => item.name === filterObj.name);
-    const changedtags = this.filterArr({ name: filterObj.name, isActive: newValue }, index);
-    this.filters = changedtags;
-    this.localStorageService.setTagsOfNews('newsTags', changedtags);
+    const changedTags = this.filterArr({ name: filterObj.name, isActive: newValue }, index);
+    this.filters = changedTags;
+    this.localStorageService.setTagsOfNews('newsTags', changedTags);
   }
 
   public goToPreview(): void {
