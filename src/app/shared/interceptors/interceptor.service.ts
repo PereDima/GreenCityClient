@@ -58,7 +58,7 @@ export class InterceptorService implements HttpInterceptor {
     if (this.isQueryWithProcessOrder(req.url)) {
       return next.handle(req).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 400) {
+          if (error.status >= 400) {
             this.ubsOrderFormService.setOrderResponseErrorStatus(true);
           }
           return throwError(error);
@@ -131,10 +131,12 @@ export class InterceptorService implements HttpInterceptor {
    */
   private handleRefreshTokenIsNotValid(error: HttpErrorResponse): Observable<HttpEvent<any>> {
     const currentUrl = this.router.url;
+    const isUBS = currentUrl.includes('ubs');
     this.isRefreshing = false;
     this.localStorageService.clear();
     this.dialog.closeAll();
     this.userOwnAuthService.isLoginUserSubject.next(false);
+    this.localStorageService.setUbsRegistration(isUBS);
     this.dialog
       .open(AuthModalComponent, {
         hasBackdrop: true,
