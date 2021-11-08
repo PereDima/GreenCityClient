@@ -16,9 +16,14 @@ export class UbsAdminExportDetailsComponent implements OnInit, OnDestroy {
   public receivingStations: string[];
   private destroy$: Subject<boolean> = new Subject<boolean>();
   constructor(private orderService: OrderService) {}
+  pageOpen: boolean;
 
   ngOnInit(): void {
     this.getReceivingStations();
+  }
+
+  openDetails() {
+    this.pageOpen = !this.pageOpen;
   }
 
   public getReceivingStations(): void {
