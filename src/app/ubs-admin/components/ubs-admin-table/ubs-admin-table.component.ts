@@ -226,6 +226,7 @@ export class UbsAdminTableComponent implements OnInit, AfterViewChecked, OnDestr
     this.sortingColumn = columnName;
     this.sortType = sortingType;
     this.arrowDirection = this.arrowDirection === columnName ? null : columnName;
+    this.currentPage = 0;
     this.getTable(columnName, sortingType);
   }
 
@@ -272,7 +273,7 @@ export class UbsAdminTableComponent implements OnInit, AfterViewChecked, OnDestr
   }
 
   public cancelEditCell(ids: number[]): void {
-    this.adminTableService.cancelEdit(ids);
+    this.adminTableService.cancelEdit(ids).subscribe();
     this.idsToChange = [];
     this.allChecked = false;
   }
@@ -354,6 +355,14 @@ export class UbsAdminTableComponent implements OnInit, AfterViewChecked, OnDestr
   openOrder(row): void {
     this.orderService.setSelectedOrder(row);
     this.router.navigate(['ubs-admin', 'order']);
+  }
+
+  showTooltip(title, tooltip) {
+    const lengthStrUa = title.ua.split('').length;
+    const lengthStrEn = title.en.split('').length;
+    if ((this.currentLang === 'ua' && lengthStrUa > 17) || (this.currentLang === 'en' && lengthStrEn > 18)) {
+      tooltip.toggle();
+    }
   }
 
   ngOnDestroy() {
