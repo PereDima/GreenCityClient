@@ -11,7 +11,7 @@ export class CreateEditNewsFormBuilder {
     return this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(170), this.noWhitespaceValidator]],
       source: [''],
-      content: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(63206)]],
+      content: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(40000)]],
       tags: this.fb.array([]),
       image: ['']
     });

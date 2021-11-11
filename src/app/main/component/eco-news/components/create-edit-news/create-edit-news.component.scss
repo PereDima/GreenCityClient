@@ -1,3 +1,58 @@
+::ng-deep {
+  .ql-toolbar {
+    border-radius: 5px 5px 0 0;
+  }
+  .ql-editor {
+    min-height: 200px;
+  }
+
+  .ql-editor,
+  .ql-container {
+    border-radius: 0 0 5px 5px;
+  }
+
+  .ng-untouched .ql-editor {
+    border: 1px solid grey;
+  }
+
+  .ng-touched.ng-valid {
+    .ql-editor {
+      border: 1px solid grey;
+    }
+
+    & > .ql-container > .ql-editor {
+      border: 1px solid red;
+    }
+  }
+}
+
+::ng-deep .ng-untouched .ql-editor {
+  border: 1px solid grey;
+}
+
+//::ng-deep .ng-touched .ql-editor:focus {
+//    border: 1px solid black !important;
+//}
+
+::ng-deep .ng-touched.ng-invalid > .ql-container > .ql-editor {
+  border: 1px solid red;
+}
+
+::ng-deep .ng-touched.ng-valid .ql-editor {
+  border: 1px solid grey;
+}
+
+//.ng-touched.ng-invalid .ql-container {
+//  border: 2px solid red;
+//}
+//.ng-touched.ng-valid .ql-container {
+//  border: 2px solid red;
+//}
+
+//.unfocused-error.ng-touched.ng-invalid .ql-editor {
+//  border: 1px solid red;
+//}
+
 .box {
   width: 1140px;
   margin: 115px auto 0 auto;

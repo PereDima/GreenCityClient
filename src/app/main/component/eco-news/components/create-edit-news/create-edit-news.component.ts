@@ -16,6 +16,9 @@ import { MatSnackBarComponent } from '@global-errors/mat-snack-bar/mat-snack-bar
 import { FormBaseComponent } from '@shared/components/form-base/form-base.component';
 import { LocalStorageService } from '@global-service/localstorage/local-storage.service';
 import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
+import Quill from 'quill';
+import 'quill-emoji/dist/quill-emoji.js';
+import ImageResize from 'quill-image-resize-module';
 
 @Component({
   selector: 'app-create-edit-news',
@@ -23,6 +26,47 @@ import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
   styleUrls: ['./create-edit-news.component.scss']
 })
 export class CreateEditNewsComponent extends FormBaseComponent implements OnInit, OnDestroy {
+  constructor(
+    public router: Router,
+    public dialog: MatDialog,
+    private injector: Injector,
+    @Inject(ACTION_TOKEN) private config: { [name: string]: ActionInterface }
+  ) {
+    super(router, dialog);
+    this.createEditNewsFormBuilder = injector.get(CreateEditNewsFormBuilder);
+    this.createEcoNewsService = injector.get(CreateEcoNewsService);
+    this.ecoNewsService = injector.get(EcoNewsService);
+    this.route = injector.get(ActivatedRoute);
+    this.localStorageService = injector.get(LocalStorageService);
+    this.snackBar = injector.get(MatSnackBarComponent);
+    this.quillModules = {
+      'emoji-shortname': true,
+      'emoji-textarea': false,
+      'emoji-toolbar': true,
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['blockquote', 'code-block'],
+
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+        [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+        [{ direction: 'rtl' }], // text direction
+
+        [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+        [{ font: [] }],
+        [{ align: [] }],
+        ['clean'], // remove formatting button
+        ['link', 'image', 'video'], // link and image, video
+        ['emoji']
+      ],
+      imageResize: true
+    };
+    Quill.register('modules/imageResize', ImageResize);
+  }
   public isPosting = false;
   public form: FormGroup;
   public isArrayEmpty = true;
@@ -55,29 +99,21 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     }
   };
   public onSubmit;
-  private quillBlurred = false;
-  private quillFocused = false;
   private createEditNewsFormBuilder: CreateEditNewsFormBuilder;
   private createEcoNewsService: CreateEcoNewsService;
   private ecoNewsService: EcoNewsService;
   private route: ActivatedRoute;
   private localStorageService: LocalStorageService;
   private snackBar: MatSnackBarComponent;
+  public quillModules = {};
+  public editorStyle = {
+    minHeight: '50px',
+    borderRadius: '0 0 5px 5px'
+    // border: '5px solid var(--secondary-grey)'
+  };
 
-  constructor(
-    public router: Router,
-    public dialog: MatDialog,
-    private injector: Injector,
-    @Inject(ACTION_TOKEN) private config: { [name: string]: ActionInterface }
-  ) {
-    super(router, dialog);
-    this.createEditNewsFormBuilder = injector.get(CreateEditNewsFormBuilder);
-    this.createEcoNewsService = injector.get(CreateEcoNewsService);
-    this.ecoNewsService = injector.get(EcoNewsService);
-    this.route = injector.get(ActivatedRoute);
-    this.localStorageService = injector.get(LocalStorageService);
-    this.snackBar = injector.get(MatSnackBarComponent);
-  }
+  blured = false;
+  focused = false;
 
   ngOnInit() {
     this.getNewsIdFromQueryParams();
@@ -161,17 +197,20 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
 
   public setDataForEdit(): void {
     this.attributes = this.config.edit;
+    console.log(this.attributes);
     this.onSubmit = this.editNews;
   }
 
   public setDataForCreate(): void {
     this.attributes = this.config.create;
+    console.log(this.attributes);
     this.onSubmit = this.createNews;
   }
 
   public getNewsIdFromQueryParams(): void {
     this.route.queryParams.subscribe((queryParams: QueryParams) => {
       this.newsId = queryParams.id;
+      // console.log(queryParams.id);
     });
   }
 
@@ -307,30 +346,60 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     return this.createEcoNewsService.isImageValid;
   }
 
-  created(event) {
-    // tslint:disable-next-line:no-console
-    // event: Quill
-    console.log('editor-created', event);
-  }
+  // created(event) {
+  //   // tslint:disable-next-line:no-console
+  //   // event: Quill
+  //   console.log('editor-created', event);
+  // }
 
   changedEditor(event: EditorChangeContent | EditorChangeSelection) {
     // tslint:disable-next-line:no-console
-    console.log('editor-change', event);
+
+    if (event.event !== 'selection-change') {
+      const editorText = event.text.replace(/\n/g, '');
+      console.log(editorText, editorText.length, event.html?.length);
+    }
   }
 
-  focus($event) {
+  focus($event: any) {
     // tslint:disable-next-line:no-console
     console.log('focus', $event);
-    this.quillFocused = true;
-    this.quillBlurred = false;
+    this.focused = true;
+    this.blured = false;
+    // this.editorStyle.border = '2px solid var(--secondary-grey)';
+    console.log(this.editorStyle);
+    //   {
+    //   minHeight: '50px',
+    //   borderRadius: '0 0 5px 5px',
+    //   border: '1px solid var(--secondary-grey)'
+    // };
   }
 
-  blur($event) {
+  blur($event: any) {
     // tslint:disable-next-line:no-console
     console.log('blur', $event);
-    this.quillFocused = false;
-    this.quillBlurred = true;
+    this.focused = false;
+    this.blured = true;
+    // this.editorStyle.border = '1px solid var(--secondary-grey)';
+    console.log(this.editorStyle);
+    // this.toggleState();
   }
+
+  // !Quill keyboard Binding
+  // addBindingCreated(quill) {
+  //   quill.keyboard.addBinding({
+  //     key: 'b'
+  //   }, (range, context) => {
+  //     console.log('KEYBINDING B', range, context);
+  //   });
+  //
+  //   quill.keyboard.addBinding({
+  //     key: 'B',
+  //     shiftKey: true
+  //   }, (range, context) => {
+  //     console.log('KEYBINDING SHIFT + B', range, context);
+  //   });
+  // }
 
   ngOnDestroy() {
     this.destroyed$.next(true);
@@ -338,5 +407,19 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     if (this.formChangeSub) {
       this.formChangeSub.unsubscribe();
     }
+  }
+
+  stateFlag = false;
+
+  toggleState() {
+    this.stateFlag = !this.stateFlag;
+  }
+  calculateClasses() {
+    return {
+      // '.unfocused-error': this.stateFlag,
+      // btn: true,
+      // 'btn-primary': true,
+      // 'btn-extra-class': this.stateFlag
+    };
   }
 }

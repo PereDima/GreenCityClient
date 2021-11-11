@@ -10,8 +10,8 @@
         <div class="wrapper">
           <div class="left-form-column">
             <div class="item-block">
+              <h3>{{ 'create-news.news-title' | translate }}</h3>
               <label>
-                <h3>{{ 'create-news.news-title' | translate }}</h3>
                 <textarea
                   maxlength="170"
                   placeholder="{{ 'create-news.title-placeholder' | translate }}"
@@ -37,8 +37,8 @@
               </p>
             </div>
             <div>
+              <h3>{{ 'create-news.source-title' | translate }}</h3>
               <label>
-                <h3>{{ 'create-news.source-title' | translate }}</h3>
                 <input
                   type="text"
                   placeholder="{{ 'create-news.source-placeholder' | translate }}"
@@ -59,21 +59,36 @@
         </div>
         <div class="textarea-wrapper">
           <h3 class="textarea-title">{{ 'create-news.content-title' | translate }}</h3>
-          <textarea
-            minlength="20"
-            name="main-area"
-            placeholder="{{ 'create-news.content-placeholder' | translate }}"
-            formControlName="content"
-            (keyup)="autoResize(true, $event)"
-          ></textarea>
+          <!--          <textarea-->
+          <!--            minlength="20"-->
+          <!--            name="main-area"-->
+          <!--            placeholder="{{ 'create-news.content-placeholder' | translate }}"-->
+          <!--            formControlName="content"-->
+          <!--            (keyup)="autoResize(true, $event)"-->
+          <!--          ></textarea>-->
           <quill-editor
-            [styles]="{ height: '200px' }"
-            (onFocus)="focus($event)"
+            [modules]="quillModules"
+            formControlName="content"
+            [required]="true"
+            [minLength]="20"
+            [maxLength]="40000"
+            placeholder="{{ 'create-news.content-placeholder' | translate }}"
             (onEditorChanged)="changedEditor($event)"
+            (onFocus)="focus($event)"
             (onBlur)="blur($event)"
-            (onEditorCreated)="created($event)"
-          >
-          </quill-editor>
+          ></quill-editor>
+          <!--          <mat-form-field appearance="fill" floatLabel='always'>-->
+          <!--            <mat-label>Label mat-quill</mat-label>-->
+          <!--            <mat-quill-->
+          <!--              matInput-->
+          <!--              name="editor"-->
+          <!--              formControlName="matControl"-->
+          <!--              [required]="true"-->
+          <!--              [minLength]="20"-->
+          <!--              [maxLength]="40000"-->
+          <!--            ></mat-quill>-->
+          <!--            <mat-hint>Just write :)</mat-hint>-->
+          <!--          </mat-form-field>-->
           <p class="textarea-description">{{ 'create-news.content-tooltip' | translate }}</p>
         </div>
         <div class="date">
