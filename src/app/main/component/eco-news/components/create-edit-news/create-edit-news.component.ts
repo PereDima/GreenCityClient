@@ -106,14 +106,8 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   private localStorageService: LocalStorageService;
   private snackBar: MatSnackBarComponent;
   public quillModules = {};
-  public editorStyle = {
-    minHeight: '50px',
-    borderRadius: '0 0 5px 5px'
-    // border: '5px solid var(--secondary-grey)'
-  };
-
-  blured = false;
-  focused = false;
+  public blurred = false;
+  public focused = false;
 
   ngOnInit() {
     this.getNewsIdFromQueryParams();
@@ -210,7 +204,6 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   public getNewsIdFromQueryParams(): void {
     this.route.queryParams.subscribe((queryParams: QueryParams) => {
       this.newsId = queryParams.id;
-      // console.log(queryParams.id);
     });
   }
 
@@ -353,8 +346,6 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   // }
 
   changedEditor(event: EditorChangeContent | EditorChangeSelection) {
-    // tslint:disable-next-line:no-console
-
     if (event.event !== 'selection-change') {
       const editorText = event.text.replace(/\n/g, '');
       console.log(editorText, editorText.length, event.html?.length);
@@ -362,27 +353,15 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   }
 
   focus($event: any) {
-    // tslint:disable-next-line:no-console
     console.log('focus', $event);
     this.focused = true;
-    this.blured = false;
-    // this.editorStyle.border = '2px solid var(--secondary-grey)';
-    console.log(this.editorStyle);
-    //   {
-    //   minHeight: '50px',
-    //   borderRadius: '0 0 5px 5px',
-    //   border: '1px solid var(--secondary-grey)'
-    // };
+    this.blurred = false;
   }
 
   blur($event: any) {
-    // tslint:disable-next-line:no-console
     console.log('blur', $event);
     this.focused = false;
-    this.blured = true;
-    // this.editorStyle.border = '1px solid var(--secondary-grey)';
-    console.log(this.editorStyle);
-    // this.toggleState();
+    this.blurred = true;
   }
 
   // !Quill keyboard Binding
@@ -407,19 +386,5 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     if (this.formChangeSub) {
       this.formChangeSub.unsubscribe();
     }
-  }
-
-  stateFlag = false;
-
-  toggleState() {
-    this.stateFlag = !this.stateFlag;
-  }
-  calculateClasses() {
-    return {
-      // '.unfocused-error': this.stateFlag,
-      // btn: true,
-      // 'btn-primary': true,
-      // 'btn-extra-class': this.stateFlag
-    };
   }
 }
