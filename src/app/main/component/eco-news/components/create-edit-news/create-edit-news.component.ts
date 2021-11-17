@@ -43,26 +43,33 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
       'emoji-shortname': true,
       'emoji-textarea': false,
       'emoji-toolbar': true,
-      toolbar: [
-        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-        ['blockquote', 'code-block'],
+      toolbar: {
+        container: [
+          ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+          ['blockquote', 'code-block'],
 
-        [{ header: 1 }, { header: 2 }], // custom button values
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-        [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-        [{ direction: 'rtl' }], // text direction
+          [{ header: 1 }, { header: 2 }], // custom button values
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+          [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+          [{ direction: 'rtl' }], // text direction
 
-        [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-        [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-        [{ font: [] }],
-        [{ align: [] }],
-        ['clean'], // remove formatting button
-        ['link', 'image', 'video'], // link and image, video
-        ['emoji']
-      ],
+          [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+          [{ font: [] }],
+          [{ align: [] }],
+          ['clean'], // remove formatting button
+          ['link', 'image', 'video'], // link and image, video
+          ['emoji']
+        ]
+        // handlers: {
+        //   image: (image) => {
+        //     console.log(image);
+        //   }
+        // },
+      },
       imageResize: true
     };
     Quill.register('modules/imageResize', ImageResize);
@@ -110,7 +117,7 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
   public focused = false;
 
   ngOnInit() {
-    this.getNewsIdFromQueryParams();
+    // this.getNewsIdFromQueryParams();
     this.initPageForCreateOrEdit();
     this.onSourceChange();
     this.setLocalizedTags();
@@ -173,6 +180,7 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
       this.formData = this.createEcoNewsService.getFormData();
       this.newsId = this.createEcoNewsService.getNewsId();
       if (this.formData) {
+        console.log(this.formData.value);
         this.form = this.createEditNewsFormBuilder.getEditForm(this.formData.value);
         this.setActiveFilters(this.formData.value);
       }
@@ -201,11 +209,12 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     this.onSubmit = this.createNews;
   }
 
-  public getNewsIdFromQueryParams(): void {
-    this.route.queryParams.subscribe((queryParams: QueryParams) => {
-      this.newsId = queryParams.id;
-    });
-  }
+  // public getNewsIdFromQueryParams(): void {
+  //   this.route.queryParams.subscribe((queryParams: QueryParams) => {
+  //     this.newsId = queryParams.id;
+  //     console.log(this.newsId);
+  //   });
+  // }
 
   public autoResize(textarea: boolean, e: any) {
     const DEFAULT_SIZE_INPUT_TITTLE = '48px';
@@ -349,17 +358,18 @@ export class CreateEditNewsComponent extends FormBaseComponent implements OnInit
     if (event.event !== 'selection-change') {
       const editorText = event.text.replace(/\n/g, '');
       console.log(editorText, editorText.length, event.html?.length);
+      // console.log(event);
     }
   }
 
   focus($event: any) {
-    console.log('focus', $event);
+    // console.log('focus', $event);
     this.focused = true;
     this.blurred = false;
   }
 
   blur($event: any) {
-    console.log('blur', $event);
+    // console.log('blur', $event);
     this.focused = false;
     this.blurred = true;
   }

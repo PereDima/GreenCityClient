@@ -1,9 +1,8 @@
-import { RestoreDto } from './../../../../model/restroreDto';
+import { RestoreDto } from '@global-models/restroreDto';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed, fakeAsync, tick, flush, inject } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 
-import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ChangePasswordService } from '@auth-service/change-password.service';
 import { ConfirmRestorePasswordComponent } from './confirm-restore-password.component';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,7 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { observable, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBarComponent } from '@global-errors/mat-snack-bar/mat-snack-bar.component';
 import { MatDialogRef } from '@angular/material/dialog';

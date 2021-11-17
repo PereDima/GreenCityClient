@@ -279,11 +279,11 @@ describe('CreateEditNewsComponent', () => {
     expect(component.toggleIsActive).toHaveBeenCalledWith(filter, true);
   });
 
-  it('should call getNewsIdFromQueryParams method in ngOnInit', () => {
-    spyOn(component, 'getNewsIdFromQueryParams');
-    component.ngOnInit();
-    expect(component.getNewsIdFromQueryParams).toHaveBeenCalled();
-  });
+  // it('should call getNewsIdFromQueryParams method in ngOnInit', () => {
+  //   spyOn(component, 'getNewsIdFromQueryParams');
+  //   component.ngOnInit();
+  //   expect(component.getNewsIdFromQueryParams).toHaveBeenCalled();
+  // });
 
   it('should change isArrayEmpty to false property after adding tag', () => {
     component.isArrayEmpty = true;
