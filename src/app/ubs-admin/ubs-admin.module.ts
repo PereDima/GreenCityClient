@@ -56,6 +56,8 @@ import { UbsAdminEmployeeTableComponent } from './components/ubs-admin-employee/
 import { UbsAdminCustomerDetailsComponent } from './components/ubs-admin-customers/ubs-admin-customer-details/ubs-admin-customer-details.component';
 import { UbsAdminOrderHistoryComponent } from './components/ubs-admin-order-history/ubs-admin-order-history.component';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { AddOrderCancellationReasonComponent } from './components/add-order-cancellation-reason/add-order-cancellation-reason.component';
+import { DialogPopUpComponent } from './components/shared/components/dialog-pop-up/dialog-pop-up.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +94,9 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     UbsAdminTariffsLocationDashboardComponent,
     UbsAdminEmployeeTableComponent,
     UbsAdminCustomerDetailsComponent,
-    UbsAdminOrderHistoryComponent
+    UbsAdminOrderHistoryComponent,
+    AddOrderCancellationReasonComponent,
+    DialogPopUpComponent
   ],
   imports: [
     CommonModule,

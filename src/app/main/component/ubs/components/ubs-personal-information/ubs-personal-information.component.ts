@@ -44,12 +44,13 @@ export class UBSPersonalInformationComponent extends FormBaseComponent implement
     hasBackdrop: true,
     closeOnNavigation: true,
     disableClose: true,
-    panelClass: 'popup-dialog-container',
+    panelClass: 'custom-ubs-style',
     data: {
       popupTitle: 'confirmation.title',
       popupSubtitle: 'confirmation.subTitle',
       popupConfirm: 'confirmation.cancel',
-      popupCancel: 'confirmation.dismiss'
+      popupCancel: 'confirmation.dismiss',
+      isUBS: true
     }
   };
 
@@ -72,13 +73,8 @@ export class UBSPersonalInformationComponent extends FormBaseComponent implement
       this.currentLocation = data;
     });
     this.orderService.currentAddress.subscribe((data: Address) => {
-      if (data && data.city === this.currentLocation) {
-        this.personalDataForm.controls.address.setValue(data);
-        this.personalDataForm.controls.addressComment.setValue(data.addressComment);
-      } else {
-        this.personalDataForm.controls.address.setValue({});
-        this.personalDataForm.controls.addressComment.setValue('');
-      }
+      this.personalDataForm.controls.address.setValue(data);
+      this.personalDataForm.controls.addressComment.setValue(data.addressComment);
     });
   }
 
@@ -96,6 +92,7 @@ export class UBSPersonalInformationComponent extends FormBaseComponent implement
       .subscribe((list) => {
         this.addresses = this.getLastAddresses(list.addressList);
         localStorage.setItem('addresses', JSON.stringify(this.addresses));
+
         this.personalDataForm.patchValue({
           address: this.addresses
         });
@@ -163,8 +160,8 @@ export class UBSPersonalInformationComponent extends FormBaseComponent implement
     this.personalData.houseNumber = activeAddress.houseNumber;
     this.personalData.houseCorpus = activeAddress.houseCorpus;
     this.personalData.entranceNumber = activeAddress.entranceNumber;
-    this.personalData.latitude = activeAddress.latitude;
-    this.personalData.longitude = activeAddress.longitude;
+    this.personalData.latitude = activeAddress.coordinates.latitude;
+    this.personalData.longitude = activeAddress.coordinates.longitude;
   }
 
   setFormData(): void {
@@ -243,7 +240,9 @@ export class UBSPersonalInformationComponent extends FormBaseComponent implement
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass = 'address-matDialog-styles';
     dialogConfig.data = {
-      edit: isEdit
+      edit: isEdit,
+      currentLocation: this.currentLocation,
+      district: currentAddress?.district
     };
     if (isEdit) {
       dialogConfig.data.address = currentAddress;
