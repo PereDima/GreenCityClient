@@ -99,7 +99,7 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": ["./node_modules/quill/dist/quill.min.js"],
             "codeCoverageExclude": ["src/app/model/**/*.ts", "src/app/**/index.ts"]
           }
         },
