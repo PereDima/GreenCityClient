@@ -95,6 +95,7 @@ export class CommentsContainerComponent implements OnInit, OnDestroy {
     this.userOwnAuthService.credentialDataSubject.subscribe((data) => {
       this.isLoggedIn = data && data.userId;
       this.userId = data.userId;
+      console.log(this.isLoggedIn);
     });
   }
 

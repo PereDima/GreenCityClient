@@ -7,10 +7,11 @@ import { CommentsDTO, SocketAmountLikes } from '../../models/comments-model';
 @Component({
   selector: 'app-like-comment',
   templateUrl: './like-comment.component.html',
-  styleUrls: ['./like-comment.component.scss'],
+  styleUrls: ['./like-comment.component.scss']
 })
 export class LikeCommentComponent implements OnInit {
   @Input() private comment: CommentsDTO;
+  @Input() public isLoggedIn: boolean;
   @Output() public likesCounter = new EventEmitter();
   @ViewChild('like', { static: true }) like: ElementRef;
   public likeState: boolean;
@@ -18,12 +19,14 @@ export class LikeCommentComponent implements OnInit {
   public error = false;
   public commentsImages = {
     like: 'assets/img/comments/like.png',
-    liked: 'assets/img/comments/liked.png',
+    liked: 'assets/img/comments/liked.png'
   };
 
-  constructor( private commentsService: CommentsService,
-               private socketService: SocketService,
-               private localStorageService: LocalStorageService ) {}
+  constructor(
+    private commentsService: CommentsService,
+    private socketService: SocketService,
+    private localStorageService: LocalStorageService
+  ) {}
 
   ngOnInit() {
     this.likeState = this.comment.currentUserLiked;
@@ -32,41 +35,39 @@ export class LikeCommentComponent implements OnInit {
   }
 
   public onConnectedtoSocket(): void {
-    this.socketService.onMessage(`/topic/${this.comment.id}/comment`)
-      .subscribe((msg: SocketAmountLikes) => {
-        this.changeLkeBtn(msg);
-        this.likesCounter.emit(msg.amountLikes);
-      });
+    this.socketService.onMessage(`/topic/${this.comment.id}/comment`).subscribe((msg: SocketAmountLikes) => {
+      console.log(msg);
+      this.changeLkeBtn(msg);
+      this.likesCounter.emit(msg.amountLikes);
+    });
   }
 
   private setStartingElements(state: boolean) {
     const imgName = state ? 'liked' : 'like';
-    this.like.nativeElement.srcset = this.commentsImages[imgName];
+    if (this.like) {
+      this.like.nativeElement.srcset = this.commentsImages[imgName];
+    }
   }
 
   public getUserId(): void {
-    this.localStorageService.userIdBehaviourSubject.subscribe(id => this.userId = id);
+    this.localStorageService.userIdBehaviourSubject.subscribe((id) => (this.userId = id));
   }
 
   public pressLike(): void {
-    this.commentsService.postLike(this.comment.id)
-      .subscribe(() => {
-          this.getUserId();
-          this.socketService.send('/app/likeAndCount', {
-          id: this.comment.id,
-          amountLikes: this.likeState ? 0 : 1,
-          userId: this.userId
-         });
+    this.commentsService.postLike(this.comment.id).subscribe(() => {
+      this.getUserId();
+      this.socketService.send('/app/likeAndCount', {
+        id: this.comment.id,
+        amountLikes: this.likeState ? 0 : 1,
+        userId: this.userId
       });
+    });
   }
 
   public changeLkeBtn(msg: SocketAmountLikes): void {
-    if (msg.liked) {
-      this.likeState = true;
-      this.like.nativeElement.srcset = this.commentsImages.liked;
-    } else {
-      this.likeState = false;
-      this.like.nativeElement.srcset = this.commentsImages.like;
+    if (this.like) {
+      this.like.nativeElement.srcset = msg.liked ? this.commentsImages.liked : this.commentsImages.like;
     }
+    this.likeState = msg.liked;
   }
 }

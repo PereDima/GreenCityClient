@@ -7,7 +7,7 @@ import { SocketClientState } from './socket-state.enum';
 import { filter, first, switchMap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SocketService implements OnDestroy {
   private state: BehaviorSubject<SocketClientState>;
@@ -17,6 +17,8 @@ export class SocketService implements OnDestroy {
     this.state = new BehaviorSubject<SocketClientState>(SocketClientState.ATTEMPTING);
     this.webSocket = Stomp.over(() => new SockJS(environment.socket));
     this.webSocket.connect({}, () => {
+      console.log(1);
+      console.log(this.webSocket);
       this.state.next(SocketClientState.CONNECTED);
     });
   }
