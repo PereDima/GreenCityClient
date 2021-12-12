@@ -16,7 +16,7 @@
         <button class="btn">+ {{ 'order-payment.add-payment-btn' | translate }}</button>
       </div>
     </div>
-    <p class="need-to-pay" *ngIf="actualPrice - paidAmount !== 0">
+    <p class="need-to-pay" *ngIf="actualPrice - paidAmount !== 0 && actualPrice - paidAmount > 0">
       {{ 'order-edit.need-to-pay' | translate }} {{ actualPrice - paidAmount | localizedCurrency }}
     </p>
     <div class="table-responsive-md col-md-10 pl-0" *ngIf="paymentsArray.length !== 0">
